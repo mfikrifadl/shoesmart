@@ -30,6 +30,7 @@ class HomeController extends Controller
             $pp->diskon = false;
             if ($pp->pp_start_promo <= now() && $pp->pp_end_promo >= now()) $pp->diskon = true;
         }
+        $data['code_page'] = 'index_page';
         return view('front.index')->with($data);
     }
 

@@ -17,7 +17,7 @@ class ImgProduct extends Model
     const DELETED_AT = 'pip_deleted_at';
 
     protected $guarded = [
-        'pc_id'
+        'pip_id'
     ];
 
     public function product()

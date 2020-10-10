@@ -32,4 +32,12 @@ class Product extends Model
     {
         return $this->hasMany('App\Models\ImgProduct', 'pip_id_product', 'pp_id');
     }
+    public function sizes()
+    {
+        return $this->belongsToMany('App\Models\Size', 'App\Models\Variant', 'pv_id_product', 'pv_id_size');
+    }
+    public function variants()
+    {
+        return $this->hasMany('App\Models\Variant', 'pv_id_product', 'pp_id');
+    }
 }

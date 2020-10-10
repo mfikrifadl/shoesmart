@@ -9,7 +9,7 @@
         </div>
     </div>
     <!-- End Page Header -->
-    <form id="add_product" method="post" action="{{route('produk.add')}}">
+    <form id="add_product" method="post" action="{{route('produk.add')}}" onsubmit="return getContent()">
         @csrf
         <div class="row">
             <div class="col-lg-8">
@@ -108,7 +108,8 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="pp_description" class="control-label col-form-label">Deskripsi</label>
-                                    <div id="editor-container" name="pp_description" class="add-new-post__editor mb-1"></div>
+                                    <input type="hidden" id="pp_description" name="pp_description">
+                                    <div id="editor-container" class="add-new-post__editor mb-1"></div>
                                 </div>
                             </div>
                             <!-- End Product Care Description -->
@@ -118,7 +119,8 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="pp_measurements" class="control-label col-form-label">Measurements</label>
-                                    <div id="editor-container1" name="pp_measurements" class="add-new-post__editor mb-1"></div>
+                                    <input type="hidden" id="pp_measurements" name="pp_measurements">
+                                    <div id="editor-container1" class="add-new-post__editor mb-1"></div>
                                 </div>
                             </div>
                             <!-- End Product Care Description -->
@@ -200,3 +202,11 @@
     </form>
 </div>
 @endsection
+@push('after-script')
+<script>
+    function getContent() {
+        document.getElementById("pp_description").value = document.getElementById("editor-container").children[0].innerHTML;
+        document.getElementById("pp_measurements").value = document.getElementById("editor-container1").children[0].innerHTML;
+    }
+</script>
+@endpush

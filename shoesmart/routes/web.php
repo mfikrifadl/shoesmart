@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes(['register' => false, 'login' => false]);
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/product/{slug}', [App\Http\Controllers\ProductController::class, 'productDetail'])->name('detail.produk');
 Route::get('/admin/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/admin/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
 

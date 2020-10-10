@@ -105,7 +105,7 @@
                     @else
                     <h6>Rp {{rupiah($lp->pp_price)}}</h6>
                     @endif
-                    <a href="#">
+                    <a href="{{route('detail.produk', $lp->pp_slug)}}">
                         <p>{{$lp->pp_name}}</p>
                     </a>
                 </div>
@@ -141,8 +141,14 @@
                         </div>
                     </div>
                     <div class="pi-text">
-                        <h6>{{}}</h6>
-                        <p>Black and White Stripes Dress</p>
+                        @if($pp->diskon == true)
+                        <h6>Rp {{rupiah($pp->pp_promo_price)}}</h6>
+                        @else
+                        <h6>Rp {{rupiah($pp->pp_price)}}</h6>
+                        @endif
+                        <a href="{{route('detail.produk', $pp->pp_slug)}}">
+                            <p>Black and White Stripes Dress</p>
+                        </a>
                     </div>
                 </div>
             </div>

@@ -196,6 +196,7 @@
     <script src="{{asset('admin/scripts/shards-dashboards.1.1.0.min.js')}}"></script>
     <script src="{{asset('admin/scripts/app/app-blog-overview.1.1.0.js')}}"></script>
     <script src="{{asset('admin/scripts/app/app-blog-new-post.1.1.0.js')}}"></script>
+    @stack('after-script')
 </body>
 
 </html>
