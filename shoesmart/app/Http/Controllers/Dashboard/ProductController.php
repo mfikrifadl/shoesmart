@@ -3,10 +3,18 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\addProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
+use App\Models\color_product;
+use App\Models\ImgProduct;
 use App\Models\Product;
+use App\Models\product_category;
+use App\Models\Size;
+use App\Models\Variant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -50,16 +58,26 @@ class ProductController extends Controller
         $data['title_page'] = 'Tambah Produk';
         $data['categories'] = Category::all();
         $data['brands'] = Brand::orderBy('pb_title', 'asc')->get();
+        $data['sizes'] = Size::orderBy('ps_size', 'asc')->get();
+        $data['colors'] = Color::orderBy('pc_name', 'asc')->get();
         return view('admin.form-produk')->with($data);
     }
-    public function addProduct(Request $request)
+    public function addProduct(addProductRequest $request)
     {
-        dd($request);
         $product = new Product;
-        // dd($product);
+        $id = mt_rand();
+        $check_id = $this->check_token($id);
+        while ($check_id != 0) {
+            $id = mt_rand();
+            $check_id = $this->check_token($id);
+        }
+        $product['pp_id'] = $id;
+        $product['pp_id_brand'] = $request->pp_id_brand;
         $product['pp_name'] = $request->pp_name;
         $product['pp_gender'] = $request->pp_gender;
         $product['pp_sku'] = $request->pp_sku;
+        $product['pp_description'] = $request->pp_description;
+        $product['pp_measurements'] = $request->pp_measurements;
         $product['pp_start_promo'] = $request->pp_start_promo;
         $product['pp_end_promo'] = $request->pp_end_promo;
         $product['pp_price'] = $request->pp_price;
@@ -68,10 +86,69 @@ class ProductController extends Controller
         $product['pp_is_displayed'] = $request->pp_is_displayed;
         $product['pp_material_upper'] = $request->pp_material_upper;
         $product['pp_material_outer_sole'] = $request->pp_material_outer_sole;
-        $product['pp_id_brand'] = 1;
-        $product['pp_total_stock'] = 0;
+        $product['pp_total_stock'] = $request->pv_stock + $request->pv_stock1;
         $product['pp_final_price'] = $request->pp_price;
+        $product['pp_slug'] = Str::slug($request->pp_name, '-');
         $product->save();
-        // return redirect()->back()->with(['message' => 'Add A Product']);
+
+        $imgProduct = new ImgProduct;
+        $imgProduct['pip_id_product'] = $product['pp_id'];
+        $folder = Str::slug($request->pp_name, '-');
+        $file = $request->file('pip_img_path');
+        $nama_file = time() . "_" . $file->getClientOriginalName();
+
+        // isi dengan nama folder tempat kemana file diupload
+        $path = 'image/product/' . $folder . '/';
+        if (!is_dir('image/product/' . $folder)) {
+            mkdir('./image/product/' . $folder, 0777, TRUE);
+        }
+        $file->move($path, $nama_file);
+        $imgProduct['pip_img_path'] = $nama_file;
+
+        $imgProduct->save();
+
+        foreach ($request->category as $category) {
+            $categoryProduct = new product_category;
+            $categoryProduct['ppc_id_product'] = $product['pp_id'];
+            $categoryProduct['ppc_id_category'] = $category;
+            $categoryProduct->save();
+        }
+
+        foreach ($request->size as $size) {
+            $varian = new Variant;
+            $varian['pv_id_product'] = $product['pp_id'];
+            $varian['pv_id_color'] = $request->pv_id_color;
+            $varian['pv_stock'] = $request->pv_stock;
+            $varian['pv_id_size'] = $size;
+            $varian->save();
+        }
+
+        $color = new color_product;
+        $color['pcp_id_color'] = $request->pv_id_color;
+        $color['pcp_id_product'] = $product['pp_id'];
+        $color->save();
+
+        if (isset($request->size1)) {
+            foreach ($request->size1 as $size) {
+                $varian = new Variant;
+                $varian['pv_id_product'] = $product['pp_id'];
+                $varian['pv_id_color'] = $request->pv_id_color1;
+                $varian['pv_stock'] = $request->pv_stock1;
+                $varian['pv_id_size'] = $size;
+                $varian->save();
+            }
+
+            $color1 = new color_product;
+            $color1['pcp_id_color'] = $request->pv_id_color1;
+            $color1['pcp_id_product'] = $product['pp_id'];
+            $color1->save();
+        }
+
+        return redirect()->back()->with(['message' => 'Add A Product']);
+    }
+    public function check_token($id)
+    {
+        $data = Product::where('pp_id', $id)->count();
+        return $data;
     }
 }

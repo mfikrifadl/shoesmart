@@ -1,5 +1,13 @@
 @extends('template.admin.index')
 @section('content')
+@if(session()->has('message'))
+<div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <i class="fa fa-check mx-2"></i>
+    <strong>Success!</strong> {{ session()->get('message') }} </div>
+@endif
 <div class="main-content-container container-fluid px-4">
     <!-- Page Header -->
     <div class="page-header row no-gutters py-4">
@@ -9,7 +17,7 @@
         </div>
     </div>
     <!-- End Page Header -->
-    <form id="add_product" method="post" action="{{route('produk.add')}}" onsubmit="return getContent()">
+    <form id="add_product" method="post" action="{{route('produk.add')}}" onsubmit="return getContent()" enctype="multipart/form-data">
         @csrf
         <div class="row">
             <div class="col-lg-8">
@@ -148,6 +156,90 @@
                         </ul>
                     </div>
                 </div>
+                <div class="card mb-4">
+                    <div class="card-body-size">
+                        <div class="row">
+                            <!-- Product Size -->
+                            <div class="col-sm-12 col-md-4">
+                                <label for="pv_id_size" class="control-label col-form-label">Size<span class="text-danger">*</span></label>
+                                @foreach($sizes as $key=>$size)
+                                <div class="custom-control custom-checkbox mb-1">
+                                    <input type="checkbox" class="custom-control-input" name="size[{{$key}}]" id="size{{$size->ps_id}}" value="{{$size->ps_id}}">
+                                    <label class="custom-control-label" for="size{{$size->ps_id}}">{{$size->ps_size}}</label>
+                                </div>
+                                @endforeach
+                            </div>
+                            <!-- End Product Size -->
+                            <!-- Colro -->
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-form-label" for="pv_id_color">Color<span class="text-danger">*</span></label>
+                                    <select class="form-control" id="pv_id_color" name="pv_id_color">
+                                        @foreach($colors as $color)
+                                        <option value="{{$color->pc_id}}" style="background: {{$color->pc_rgb}};">{{$color->pc_name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- End Color -->
+                            <!-- Stock -->
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label for="pv_stock" class="control-label col-form-label">Stock<span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" name="pv_stock" id="pv_stock">
+                                </div>
+                            </div>
+                            <!-- End Stock -->
+                        </div>
+                    </div>
+                    <div class="row ml-2 mt-2 mr-2 mb-1">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-primary w-100" onclick="openForm()">Tambah Variant</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4" style="display:none;" id="variant2">
+                    <div class="card-body-size">
+                        <div class="row">
+                            <!-- Product Size -->
+                            <div class="col-sm-12 col-md-4">
+                                <label for="pv_id_size" class="control-label col-form-label">Size<span class="text-danger">*</span></label>
+                                @foreach($sizes as $key=>$size)
+                                <div class="custom-control custom-checkbox mb-1">
+                                    <input type="checkbox" class="custom-control-input" name="size1[{{$key}}]" id="size1{{$size->ps_id}}" value="{{$size->ps_id}}">
+                                    <label class="custom-control-label" for="size1{{$size->ps_id}}">{{$size->ps_size}}</label>
+                                </div>
+                                @endforeach
+                            </div>
+                            <!-- End Product Size -->
+                            <!-- Colro -->
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-form-label" for="pv_id_color1">Color<span class="text-danger">*</span></label>
+                                    <select class="form-control" id="pv_id_color1" name="pv_id_color1">
+                                        @foreach($colors as $color)
+                                        <option value="{{$color->pc_id}}" style="background: {{$color->pc_rgb}};">{{$color->pc_name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- End Color -->
+                            <!-- Stock -->
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label for="pv_stock1" class="control-label col-form-label">Stock<span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" name="pv_stock1" id="pv_stock">
+                                </div>
+                            </div>
+                            <!-- End Stock -->
+                        </div>
+                    </div>
+                    <div class="row ml-2 mt-2 mr-2 mb-1">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-primary w-100" onclick="closeForm()">Batal Tambah Variant</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -204,6 +296,16 @@
                             </div>
                         </div>
                         <!-- End Material Upper Sole -->
+                        <!-- Material Upper Sole -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="pip_img_path" class="control-label col-form-label">Foto Product<span class="text-danger">*</span></label>
+                                    <input type="file" name="pip_img_path" class="dropify" data-max-file-size="3M" required multiple />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Material Upper Sole -->
 
                         <div class="row">
                             <div class="col-md-12">
@@ -218,10 +320,27 @@
 </div>
 @endsection
 @push('after-script')
+<script src="{{ asset('dropify/js/dropify.js' )}}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.dropify').dropify();
+    });
+</script>
 <script>
     function getContent() {
         document.getElementById("pp_description").value = document.getElementById("editor-container").children[0].innerHTML;
         document.getElementById("pp_measurements").value = document.getElementById("editor-container1").children[0].innerHTML;
     }
 </script>
+
+<script>
+    function openForm() {
+        document.getElementById("variant2").style.display = "block";
+    }
+
+    function closeForm() {
+        document.getElementById("variant2").style.display = "none";
+    }
+</script>
+
 @endpush

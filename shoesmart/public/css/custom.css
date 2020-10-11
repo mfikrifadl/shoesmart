@@ -1,0 +1,5 @@
+.card-body-size {
+    padding: 1.875rem;
+    height: 200px;
+    overflow-y: auto;
+}

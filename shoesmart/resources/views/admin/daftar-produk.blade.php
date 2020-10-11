@@ -41,15 +41,15 @@
                             <tr>
                                 <td>{{$key+1}}</td>
                                 <td>{{$prod->pp_name}}</td>
-                                <td>{{$prod->pp_price}}</td>
-                                <td>{{$prod->pp_promo_price}}</td>
+                                <td>Rp {{rupiah($prod->pp_price)}}</td>
+                                <td>Rp {{rupiah($prod->pp_promo_price)}}</td>
                                 <td>{{$prod->pp_total_stock}}</td>
-                                <td><button type="button" class="btn btn-white">
+                                <td><a href="/product/{{$prod->pp_slug}}" type="button" class="btn btn-white">
                                         <span class="text-info">
                                             <i class="material-icons">zoom_in</i>
                                         </span>
                                         Detail
-                                    </button>
+                                    </a>
                                     @if($title_page == 'Daftar Produk')
                                     <form action="{{route('produk.draft', $prod->pp_id)}}" class="d-inline-block" method="POST">
                                         @csrf
