@@ -17,8 +17,9 @@
         </div>
     </div>
     <!-- End Page Header -->
-    <form id="add_product" method="post" action="{{route('produk.add')}}" onsubmit="return getContent()" enctype="multipart/form-data">
+    <form id="edit_product" method="post" action="{{route('produk.edit', $product)}}" onsubmit="return getContent()" enctype="multipart/form-data">
         @csrf
+        {{method_field('PUT')}}
         <div class="row">
             <div class="col-lg-8">
                 <div class="card mb-4">
@@ -27,7 +28,7 @@
                             <div class="col-sm-12 col-md-8">
                                 <div class="form-group">
                                     <label for="pp_name" class="control-label col-form-label">Nama produk<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="pp_name" id="pp_name" required="">
+                                    <input type="text" class="form-control" name="pp_name" id="pp_name" value="{{$product->pp_name}}" required="">
                                 </div>
                             </div>
                             <!-- End Product Name -->
@@ -35,7 +36,7 @@
                             <div class="col-sm-12 col-md-4">
                                 <div class="form-group">
                                     <label class="control-label col-form-label" for="pp_gender">Gender<span class="text-danger">*</span></label>
-                                    <select class="form-control" id="pp_gender" name="pp_gender" required="">
+                                    <select class="form-control" id="pp_gender" name="pp_gender" value="{{$product->pp_gender}}" required="">
                                         <option value="male">male</option>
                                         <option value="female">female</option>
                                         <option value="male/female">male/female</option>
@@ -49,14 +50,14 @@
                             <div class="col-sm-12 col-md-4">
                                 <div class="form-group">
                                     <label for="pp_sku" class="control-label col-form-label">SKU<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="pp_sku" id="pp_sku" required="">
+                                    <input type="text" class="form-control" name="pp_sku" id="pp_sku" value="{{$product->pp_sku}}" required="">
                                 </div>
                             </div>
                             <!-- Product Promo Start -->
                             <div class="col-sm-12 col-md-4">
                                 <div class="form-group">
                                     <label for="pp_start_promo" class="control-label col-form-label">Promo Start</span></label>
-                                    <input type="date" class="form-control" name="pp_start_promo" id="pp_start_promo">
+                                    <input type="date" class="form-control" name="pp_start_promo" id="pp_start_promo" value="{{$product->pp_start_promo}}">
                                 </div>
                             </div>
                             <!-- End Product Promo Start -->
@@ -64,7 +65,7 @@
                             <div class="col-sm-12 col-md-4">
                                 <div class="form-group">
                                     <label for="pp_end_promo" class="control-label col-form-label">Promo End</label>
-                                    <input type="date" class="form-control" name="pp_end_promo" id="pp_end_promo">
+                                    <input type="date" class="form-control" name="pp_end_promo" id="pp_end_promo" value="{{$product->pp_end_promo}}">
                                 </div>
                             </div>
                             <!-- End Product Promo Close -->
@@ -79,7 +80,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Rp</span>
                                         </div>
-                                        <input type="number" class="form-control" name="pp_price" id="pp_price" required="">
+                                        <input type="number" class="form-control" name="pp_price" id="pp_price" value="{{$product->pp_price}}" required="">
                                     </div>
                                 </div>
                             </div>
@@ -92,7 +93,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Rp</span>
                                         </div>
-                                        <input type="number" class="form-control" name="pp_promo_price" id="pp_promo_price">
+                                        <input type="number" class="form-control" name="pp_promo_price" id="pp_promo_price" value="{{$product->pp_promo_price}}">
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +106,7 @@
                                 <div class="form-group">
                                     <label for="pp_care_label" class="control-label col-form-label">Care Label</label>
                                     <div class="form-group">
-                                        <textarea class="form-control" name="pp_care_label" id="pp_care_label"></textarea>
+                                        <textarea class="form-control" name="pp_care_label" id="pp_care_label">{{$product->pp_care_label}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -117,7 +118,7 @@
                                 <div class="form-group">
                                     <label for="pp_description" class="control-label col-form-label">Deskripsi</label>
                                     <input type="hidden" id="pp_description" name="pp_description">
-                                    <div id="editor-container" class="add-new-post__editor mb-1"></div>
+                                    <div id="editor-container" class="add-new-post__editor mb-1">{!! $product->pp_description !!}</div>
                                 </div>
                             </div>
                             <!-- End Product Care Description -->
@@ -128,7 +129,7 @@
                                 <div class="form-group">
                                     <label for="pp_measurements" class="control-label col-form-label">Measurements</label>
                                     <input type="hidden" id="pp_measurements" name="pp_measurements">
-                                    <div id="editor-container1" class="add-new-post__editor mb-1"></div>
+                                    <div id="editor-container1" class="add-new-post__editor mb-1" value="{{$product->pp_measurements}}">{!! $product->pp_measurements !!}</div>
                                 </div>
                             </div>
                             <!-- End Product Care Description -->
@@ -148,7 +149,12 @@
                             <li class="list-group-item px-3 pb-2">
                                 @foreach($categories as $key=>$category)
                                 <div class="custom-control custom-checkbox mb-1">
-                                    <input type="checkbox" class="custom-control-input" name="category[{{$key}}]" value="{{$category->pc_id}}" id="category{{$key+1}}" required>
+                                    @foreach($product->categories as $pc)
+                                    @if($category->pc_id == $pc->pc_id)
+                                    <input type="checkbox" class="custom-control-input" name="category[{{$key}}]" value="{{$category->pc_id}}" id="category{{$key+1}}" checked>
+                                    @endif
+                                    @endforeach
+                                    <input type="checkbox" class="custom-control-input" name="category[{{$key}}]" value="{{$category->pc_id}}" id="category{{$key+1}}">
                                     <label class="custom-control-label" for="category{{$key+1}}">{{$category->pc_title}}</label>
                                 </div>
                                 @endforeach
@@ -164,17 +170,23 @@
                                 <label for="pv_id_size" class="control-label col-form-label">Size<span class="text-danger">*</span></label>
                                 @foreach($sizes as $key=>$size)
                                 <div class="custom-control custom-checkbox mb-1">
+                                    @foreach($product->sizes as $ps)
+                                    @if($size->ps_id == $ps->ps_id)
+                                    <input type="checkbox" class="custom-control-input" name="size[{{$key}}]" id="size{{$size->ps_id}}" value="{{$size->ps_id}}" checked>
+                                    @endif
+                                    @endforeach
                                     <input type="checkbox" class="custom-control-input" name="size[{{$key}}]" id="size{{$size->ps_id}}" value="{{$size->ps_id}}">
                                     <label class="custom-control-label" for="size{{$size->ps_id}}">{{$size->ps_size}}</label>
                                 </div>
                                 @endforeach
                             </div>
                             <!-- End Product Size -->
-                            <!-- Colro -->
+                            <!-- Color -->
                             <div class="col-sm-12 col-md-4">
                                 <div class="form-group">
                                     <label class="control-label col-form-label" for="pv_id_color">Color<span class="text-danger">*</span></label>
-                                    <select class="form-control" id="pv_id_color" name="pv_id_color">
+                                    <select class="form-control" id="pv_id_color" name="pv_id_color" required>
+                                        <option value="{{$product->colors[0]->pc_id}}" style="background: {{$product->colors[0]->pc_rgb}};">{{$product->colors[0]->pc_name}}</option>
                                         @foreach($colors as $color)
                                         <option value="{{$color->pc_id}}" style="background: {{$color->pc_rgb}};">{{$color->pc_name}}</option>
                                         @endforeach
@@ -186,7 +198,7 @@
                             <div class="col-sm-12 col-md-4">
                                 <div class="form-group">
                                     <label for="pv_stock" class="control-label col-form-label">Stock<span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" name="pv_stock" id="pv_stock">
+                                    <input type="number" class="form-control" name="pv_stock" id="pv_stock" value="{{$product->variants[0]->pv_stock}}" required>
                                 </div>
                             </div>
                             <!-- End Stock -->
@@ -206,6 +218,11 @@
                                 <label for="pv_id_size" class="control-label col-form-label">Size<span class="text-danger">*</span></label>
                                 @foreach($sizes as $key=>$size)
                                 <div class="custom-control custom-checkbox mb-1">
+                                    @foreach($product->sizes as $ps)
+                                    @if($size->ps_id == $ps->ps_id)
+                                    <input type="checkbox" class="custom-control-input" name="size1[{{$key}}]" id="size1{{$size->ps_id}}" value="{{$size->ps_id}}" checked>
+                                    @endif
+                                    @endforeach
                                     <input type="checkbox" class="custom-control-input" name="size1[{{$key}}]" id="size1{{$size->ps_id}}" value="{{$size->ps_id}}">
                                     <label class="custom-control-label" for="size1{{$size->ps_id}}">{{$size->ps_size}}</label>
                                 </div>
@@ -217,6 +234,9 @@
                                 <div class="form-group">
                                     <label class="control-label col-form-label" for="pv_id_color1">Color<span class="text-danger">*</span></label>
                                     <select class="form-control" id="pv_id_color1" name="pv_id_color1">
+                                        @if(isset($product->colors[1]))
+                                        <option value="{{$product->colors[1]->pc_id}}" style="background: {{$product->colors[1]->pc_rgb}};">{{$product->colors[1]->pc_name}}</option>
+                                        @endif
                                         @foreach($colors as $color)
                                         <option value="{{$color->pc_id}}" style="background: {{$color->pc_rgb}};">{{$color->pc_name}}</option>
                                         @endforeach
@@ -228,7 +248,7 @@
                             <div class="col-sm-12 col-md-4">
                                 <div class="form-group">
                                     <label for="pv_stock1" class="control-label col-form-label">Stock<span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" name="pv_stock1" id="pv_stock">
+                                    <input type="number" class="form-control" name="pv_stock1" id="pv_stock" value="{{$product->variants[0]->pv_stock}}">
                                 </div>
                             </div>
                             <!-- End Stock -->
@@ -248,11 +268,11 @@
                                     <label for="pp_description" class="control-label col-form-label">Status Produk<span class="text-danger">*</span></label>
                                     <br>
                                     <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="customRadioInline1" name="pp_is_displayed" value="true" class="custom-control-input">
+                                        <input type="radio" id="customRadioInline1" name="pp_is_displayed" value="true" class="custom-control-input" <?php if ($product->pp_is_displayed == true) echo 'checked' ?>>
                                         <label class="custom-control-label" for="customRadioInline1">Publish</label>
                                     </div>
                                     <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="customRadioInline2" name="pp_is_displayed" value="false" class="custom-control-input">
+                                        <input type="radio" id="customRadioInline2" name="pp_is_displayed" value="false" class="custom-control-input" <?php if ($product->pp_is_displayed == false) echo 'checked' ?>>
                                         <label class="custom-control-label" for="customRadioInline2">Draft</label>
                                     </div>
                                 </div>
@@ -266,6 +286,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-form-label" for="pp_id_brand">Brand<span class="text-danger">*</span></label>
                                     <select class="form-control" id="pp_id_brand" name="pp_id_brand" required="">
+                                        <option value="{{$product->pp_id_brand}}">{{$product->brand->pb_title}}</option>
                                         @foreach($brands as $brand)
                                         <option value="{{$brand->pb_id}}">{{$brand->pb_title}}</option>
                                         @endforeach
@@ -280,7 +301,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="pp_material_upper" class="control-label col-form-label">Material Upper<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="pp_material_upper" id="pp_material_upper" required="">
+                                    <input type="text" class="form-control" name="pp_material_upper" id="pp_material_upper" value="{{$product->pp_material_upper}}" required="">
                                 </div>
                             </div>
                         </div>
@@ -291,7 +312,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="pp_material_outer_sole" class="control-label col-form-label">Material Upper Sole<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="pp_material_outer_sole" id="pp_material_outer_sole" required="">
+                                    <input type="text" class="form-control" name="pp_material_outer_sole" id="pp_material_outer_sole" value="{{$product->pp_material_outer_sole}}" required="">
                                 </div>
                             </div>
                         </div>
@@ -301,7 +322,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="pip_img_path" class="control-label col-form-label">Foto Product<span class="text-danger">*</span></label>
-                                    <input type="file" name="pip_img_path" class="dropify" data-max-file-size="3M" required multiple />
+                                    <input type="file" name="pip_img_path" class="dropify" data-max-file-size="3M" multiple />
                                 </div>
                             </div>
                         </div>
@@ -317,6 +338,34 @@
             </div>
         </div><!-- end row -->
     </form>
+    <!-- Material Upper Sole -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="pip_img_path" class="control-label col-form-label">Galeri<span class="text-danger">*</span></label>
+                            <div class="form-group">
+                                @foreach($product->imgProducts as $img)
+                                <div class="thumb-wrapper">
+                                    <form action="{{route('produk.delete.img', $img->pip_id)}}" method="POST">
+                                        @csrf
+                                        {{method_field('DELETE')}}
+                                        <img class="img img-gallery" src="{{asset('image/product/'.$product->pp_slug.'/'.$img->pip_img_path)}}" alt="">
+                                        <button type="submit" class="btn btn-danger btn-circle del-img-gallery">
+                                            <i class="material-icons">delete</i> </button>
+                                    </form>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Material Upper Sole -->
 </div>
 @endsection
 @push('after-script')

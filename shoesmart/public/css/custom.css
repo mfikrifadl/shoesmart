@@ -3,3 +3,41 @@
     height: 200px;
     overflow-y: auto;
 }
+
+.img-dashboard {
+    vertical-align: middle;
+    border-style: none;
+    width: 100px;
+}
+
+.thumb-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.img-gallery {
+    width: 115px;
+    height: 115px;
+    object-fit: cover;
+}
+
+.thumb-wrapper .btn-danger {
+    position: absolute;
+    right: 0.25rem;
+    top: 0.25rem;
+}
+
+.btn-circle {
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #fa5838;
+    border-color: #fa5838;
+}

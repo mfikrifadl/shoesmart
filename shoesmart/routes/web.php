@@ -32,10 +32,13 @@ Route::prefix('dashboard')->group(function () {
     Route::name('produk')->group(function () {
         Route::get('/produk', [App\Http\Controllers\Dashboard\ProductController::class, 'index']);
         Route::get('/produk/add', [App\Http\Controllers\Dashboard\ProductController::class, 'addProductForm'])->name('.add.page');
+        Route::put('/produk/edit/{product}', [App\Http\Controllers\Dashboard\ProductController::class, 'editProduct'])->name('.edit');
+        Route::get('/produk/edit/{id}', [App\Http\Controllers\Dashboard\ProductController::class, 'editProductForm'])->name('.edit.page');
         Route::post('/produk/category/add', [App\Http\Controllers\Dashboard\ProductController::class, 'addProduct'])->name('.add');
         Route::put('/produk/draft/{id}', [App\Http\Controllers\Dashboard\ProductController::class, 'draftProduct'])->name('.draft');
         Route::put('/produk/post/{id}', [App\Http\Controllers\Dashboard\ProductController::class, 'postProduct'])->name('.post');
         Route::delete('/produk/delete/{product}', [App\Http\Controllers\Dashboard\ProductController::class, 'deleteProduct'])->name('.delete');
+        Route::delete('/produk/delete-img/{img}', [App\Http\Controllers\Dashboard\ProductController::class, 'deleteImgProduct'])->name('.delete.img');
         Route::get('/produk-draft', [App\Http\Controllers\Dashboard\ProductController::class, 'getDraftProduct'])->name('.draft.get');
     });
     Route::name('kategori')->group(function () {

@@ -31,7 +31,7 @@
                                 <th scope="col" class="border-0">#</th>
                                 <th scope="col" class="border-0">Nama Produk</th>
                                 <th scope="col" class="border-0">Harga</th>
-                                <th scope="col" class="border-0">Harga Diskon</th>
+                                <th scope="col" class="border-0">Gambar</th>
                                 <th scope="col" class="border-0">Stok</th>
                                 <th scope="col" class="border-0">Edit</th>
                             </tr>
@@ -42,8 +42,8 @@
                                 <td>{{$key+1}}</td>
                                 <td>{{$prod->pp_name}}</td>
                                 <td>Rp {{rupiah($prod->pp_price)}}</td>
-                                <td>Rp {{rupiah($prod->pp_promo_price)}}</td>
-                                <td>{{$prod->pp_total_stock}}</td>
+                                <td><img class="img-dashboard" src="{{asset('image/product/'.$prod->pp_slug.'/'.$prod->imgProducts[0]->pip_img_path)}}" /></td>
+                                <td>{{$prod->total_stock}}</td>
                                 <td><a href="/product/{{$prod->pp_slug}}" type="button" class="btn btn-white">
                                         <span class="text-info">
                                             <i class="material-icons">zoom_in</i>
@@ -83,12 +83,12 @@
                                             Hapus
                                         </button>
                                     </form>
-                                    <button type="button" class="btn btn-white">
+                                    <a href="/dashboard/produk/edit/{{$prod->pp_id}}" type="button" class="btn btn-white">
                                         <span class="text-light">
                                             <i class="material-icons">more_vert</i>
                                         </span>
                                         Edit
-                                    </button></td>
+                                    </a></td>
                             </tr>
                             @endforeach
                         </tbody>

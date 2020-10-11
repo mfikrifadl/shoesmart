@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\addProductRequest;
+use App\Http\Requests\editProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
@@ -25,7 +26,12 @@ class ProductController extends Controller
     public function index()
     {
         $data['title_page'] = 'Daftar Produk';
-        $data['produk'] = Product::where('pp_is_displayed', true)->orderBy('pp_created_at', 'asc')->get();
+        $data['produk'] = Product::where('pp_is_displayed', true)->orderBy('pp_update_at', 'desc')->get();
+        foreach ($data['produk'] as $prod) {
+            foreach ($prod->variants as $var) {
+                $prod['total_stock'] += $var->pv_stock;
+            }
+        }
         return view('admin.daftar-produk')->with($data);
     }
     public function getDraftProduct()
@@ -61,6 +67,16 @@ class ProductController extends Controller
         $data['sizes'] = Size::orderBy('ps_size', 'asc')->get();
         $data['colors'] = Color::orderBy('pc_name', 'asc')->get();
         return view('admin.form-produk')->with($data);
+    }
+    public function editProductForm($id)
+    {
+        $data['product'] = Product::find($id);
+        $data['title_page'] = 'Edit Produk';
+        $data['categories'] = Category::all();
+        $data['brands'] = Brand::orderBy('pb_title', 'asc')->get();
+        $data['sizes'] = Size::orderBy('ps_size', 'asc')->get();
+        $data['colors'] = Color::orderBy('pc_name', 'asc')->get();
+        return view('admin.form-edit-produk')->with($data);
     }
     public function addProduct(addProductRequest $request)
     {
@@ -150,5 +166,81 @@ class ProductController extends Controller
     {
         $data = Product::where('pp_id', $id)->count();
         return $data;
+    }
+    public function deleteImgProduct(ImgProduct $img)
+    {
+        $img->delete();
+        return redirect()->back()->with(['message' => 'Delete A Image']);
+    }
+    public function editProduct(editProductRequest $request, Product $product)
+    {
+        // dd($request);
+        foreach ($product->variants as $val) {
+            $val->delete();
+        }
+        foreach ($product->color_products as $col) {
+            $col->delete();
+        }
+        foreach ($product->product_categoies as $pc) {
+            $pc->delete();
+        }
+        foreach ($request->category as $category) {
+            $categoryProduct = new product_category;
+            $categoryProduct['ppc_id_product'] = $product['pp_id'];
+            $categoryProduct['ppc_id_category'] = $category;
+            $categoryProduct->save();
+        }
+
+        foreach ($request->size as $size) {
+            $varian = new Variant;
+            $varian['pv_id_product'] = $product['pp_id'];
+            $varian['pv_id_color'] = $request->pv_id_color;
+            $varian['pv_stock'] = $request->pv_stock;
+            $varian['pv_id_size'] = $size;
+            $varian->save();
+        }
+
+        $color = new color_product;
+        $color['pcp_id_color'] = $request->pv_id_color;
+        $color['pcp_id_product'] = $product['pp_id'];
+        $color->save();
+
+        if (isset($request->size1)) {
+            foreach ($request->size1 as $size) {
+                $varian = new Variant;
+                $varian['pv_id_product'] = $product['pp_id'];
+                $varian['pv_id_color'] = $request->pv_id_color1;
+                $varian['pv_stock'] = $request->pv_stock1;
+                $varian['pv_id_size'] = $size;
+                $varian->save();
+            }
+
+            $color1 = new color_product;
+            $color1['pcp_id_color'] = $request->pv_id_color1;
+            $color1['pcp_id_product'] = $product['pp_id'];
+            $color1->save();
+        }
+
+        $imgProduct = new ImgProduct;
+        $imgProduct['pip_id_product'] = $product['pp_id'];
+        $folder = Str::slug($request->pp_name, '-');
+        $file = $request->file('pip_img_path');
+        $nama_file = time() . "_" . $file->getClientOriginalName();
+
+        // isi dengan nama folder tempat kemana file diupload
+        $path = 'image/product/' . $folder . '/';
+        if (!is_dir('image/product/' . $folder)) {
+            mkdir('./image/product/' . $folder, 0777, TRUE);
+        }
+        $file->move($path, $nama_file);
+        $imgProduct['pip_img_path'] = $nama_file;
+
+        $imgProduct->save();
+
+        $data = $request->only('pp_name', 'pp_gender', 'pp_sku', 'pp_start_promo', 'pp_end_promo', 'pp_price', 'pp_promo_price', 'pp_care_label', 'pp_measurements', 'pp_is_displayed', 'pp_id_brand', 'pp_material_upper', 'pp_material_outer_sole');
+        $product->update($data);
+
+
+        return redirect()->back()->with(['message' => 'Edit A Product']);
     }
 }

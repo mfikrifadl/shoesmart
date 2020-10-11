@@ -82,24 +82,6 @@
                                 <span>List Kategori</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="tables.html">
-                                <i class="material-icons">table_chart</i>
-                                <span>Tables</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="user-profile-lite.html">
-                                <i class="material-icons">person</i>
-                                <span>User Profile</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="errors.html">
-                                <i class="material-icons">error</i>
-                                <span>Errors</span>
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </aside>
@@ -153,15 +135,9 @@
                                     <span class="d-none d-md-inline-block">{{Auth::user()->name}}</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-small">
-                                    <a class="dropdown-item" href="user-profile-lite.html">
+                                    <a class="dropdown-item" href="#">
                                         <i class="material-icons">&#xE7FD;</i>
                                         Profile</a>
-                                    <a class="dropdown-item" href="components-blog-posts.html">
-                                        <i class="material-icons">vertical_split</i>
-                                        Blog Posts</a>
-                                    <a class="dropdown-item" href="add-new-post.html">
-                                        <i class="material-icons">note_add</i>
-                                        Add New Post</a>
                                     <div class="dropdown-divider"></div>
                                     <form action="{{ route('logout') }}" class="d-inline-block" method="POST">
                                         @csrf
