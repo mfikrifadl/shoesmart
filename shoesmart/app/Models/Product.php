@@ -40,4 +40,8 @@ class Product extends Model
     {
         return $this->hasMany('App\Models\Variant', 'pv_id_product', 'pp_id');
     }
+    public function colors()
+    {
+        return $this->belongsToMany('App\Models\Color', 'App\Models\color_product', 'pcp_id_product', 'pcp_id_color');
+    }
 }

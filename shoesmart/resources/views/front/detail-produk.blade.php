@@ -4,7 +4,7 @@
 <section class="product-section">
     <div class="container">
         <div class="back-link">
-            <a href="#"> &lt;&lt; Back to Product</a>
+            <a href="/product"> &lt;&lt; Back to Product</a>
         </div>
         <div class="row">
             <div class="col-lg-6">
@@ -14,8 +14,12 @@
                 <div class="product-thumbs" tabindex="1" style="overflow: hidden; outline: none;">
                     <div class="product-thumbs-track">
                         <div class="pt active" data-imgbigurl="{{asset('image/product/'.$product->pp_slug.'/'.$product->imgProducts[0]->pip_img_path)}}"><img src="{{asset('image/product/'.$product->pp_slug.'/'.$product->imgProducts[0]->pip_img_path)}}" alt=""></div>
+                        <?php $i = 0 ?>
                         @foreach($product->imgProducts as $prod)
+                        @if($i>0)
                         <div class="pt" data-imgbigurl="{{asset('image/product/'.$product->pp_slug.'/'.$prod->pip_img_path)}}"><img src="{{asset('image/product/'.$product->pp_slug.'/'.$prod->pip_img_path)}}" alt=""></div>
+                        @endif
+                        <?php $i++ ?>
                         @endforeach
                     </div>
                 </div>
@@ -30,10 +34,23 @@
                 <h4 class="p-stock">Available: <span>In Stock</span></h4>
                 <div class="fw-size-choose">
                     <p>Size</p>
-                    @foreach($product->sizes as $size)
+                    @foreach($productSize as $size)
+                    @if($size->pv_stock < 1 ) <div class="sc-item disable">
+                        <input type="radio" name="pv_id_size" id="{{$size->size->ps_id}}" disabled>
+                        @else
+                        <div class="sc-item">
+                            <input type="radio" name="pv_id_size" id="{{$size->size->ps_id}}">
+                            @endif
+                            <label for="{{$size->size->ps_id}}">{{$size->size->ps_size}}</label>
+                        </div>
+                        @endforeach
+                </div>
+                <div class="fw-size-choose">
+                    <p>Color</p>
+                    @foreach($product->colors as $color)
                     <div class="sc-item">
-                        <input type="radio" name="pv_id_size" id="{{$size->ps_id}}">
-                        <label for="{{$size->ps_id}}">{{$size->ps_size}}</label>
+                        <input type="radio" name="pv_id_color" id="{{$color->pc_id}}">
+                        <label style="background: {{$color->pc_rgb}};" for="{{$color->pc_id}}"></label>
                     </div>
                     @endforeach
                 </div>

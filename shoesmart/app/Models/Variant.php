@@ -31,4 +31,8 @@ class Variant extends Model
     {
         return $this->hasMany('App\Models\Size', 'pv_id_size', 'ps_id');
     }
+    public function size()
+    {
+        return $this->belongsTo('App\Models\Size', 'pv_id_size', 'ps_id');
+    }
 }

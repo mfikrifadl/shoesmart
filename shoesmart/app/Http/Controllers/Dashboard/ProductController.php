@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -48,6 +49,7 @@ class ProductController extends Controller
     {
         $data['title_page'] = 'Tambah Produk';
         $data['categories'] = Category::all();
+        $data['brands'] = Brand::orderBy('pb_title', 'asc')->get();
         return view('admin.form-produk')->with($data);
     }
     public function addProduct(Request $request)

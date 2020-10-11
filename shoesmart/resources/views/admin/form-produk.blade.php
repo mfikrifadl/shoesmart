@@ -13,7 +13,7 @@
         @csrf
         <div class="row">
             <div class="col-lg-8">
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
@@ -167,6 +167,21 @@
                             </div>
                         </div>
                         <!-- end status -->
+
+                        <!-- Brand -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-form-label" for="pp_id_brand">Brand<span class="text-danger">*</span></label>
+                                    <select class="form-control" id="pp_id_brand" name="pp_id_brand" required="">
+                                        @foreach($brands as $brand)
+                                        <option value="{{$brand->pb_id}}">{{$brand->pb_title}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Brand -->
 
                         <!-- Material Upper -->
                         <div class="row">

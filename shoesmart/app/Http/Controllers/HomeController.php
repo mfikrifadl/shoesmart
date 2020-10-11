@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Guest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Jenssegers\Agent\Agent;
 
 class HomeController extends Controller
 {
@@ -18,7 +20,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
         $data['latestProducts'] = $this->getLatestProduct();
         foreach ($data['latestProducts'] as $lp) {
@@ -31,6 +33,11 @@ class HomeController extends Controller
             if ($pp->pp_start_promo <= now() && $pp->pp_end_promo >= now()) $pp->diskon = true;
         }
         $data['code_page'] = 'index_page';
+        $agent = new Agent;
+        $guest = new Guest;
+        $guest['pg_ip_address'] = $request->getClientIp();
+        $guest['pg_browser'] = $agent->browser();
+        $guest->save();
         return view('front.index')->with($data);
     }
 
