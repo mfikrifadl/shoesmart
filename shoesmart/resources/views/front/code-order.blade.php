@@ -28,6 +28,7 @@
                                     <th class="size-th">Status</th>
                                     <th class="size-th">Address</th>
                                     <th class="size-th">Date</th>
+                                    <th class="size-th">Resi</th>
                                     <th class="total-th">Total Price</th>
                                 </tr>
                             </thead>
@@ -55,6 +56,9 @@
                                     </td>
                                     <td class="size-col">
                                         <h4>{{$transaction->tt_created_at}}</h4>
+                                    </td>
+                                    <td class="size-col">
+                                        <h4>{{$transaction->tt_resi}}</h4>
                                     </td>
                                     <td class="total-col">
                                         <h4>Rp {{Rupiah($transaction->tt_total_price)}}</h4>

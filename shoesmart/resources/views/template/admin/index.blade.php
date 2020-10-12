@@ -82,6 +82,13 @@
                                 <span>List Kategori</span>
                             </a>
                         </li>
+                        <div class="sb-sidenav-menu-heading">Transaksi</div>
+                        <li class="nav-item">
+                            <a class="nav-link " href="/dashboard/transaksi">
+                                <i class="material-icons">format_list_bulleted</i>
+                                <span>List Transaksi</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </aside>

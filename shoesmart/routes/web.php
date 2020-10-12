@@ -56,4 +56,11 @@ Route::prefix('dashboard')->group(function () {
         Route::post('/kategori', [App\Http\Controllers\Dashboard\CategoryController::class, 'addcategory'])->name('.add');
         Route::delete('/kategori/{category}', [App\Http\Controllers\Dashboard\CategoryController::class, 'destroyCategory'])->name('.destroy');
     });
+    Route::name('transaksi')->group(function () {
+        Route::get('/transaksi', [App\Http\Controllers\Dashboard\TransactionController::class, 'index']);
+        Route::put('/transaksi/approve/{trans}', [App\Http\Controllers\Dashboard\TransactionController::class, 'approveTrans'])->name('.approve');
+        Route::put('/transaksi/resi/{trans}', [App\Http\Controllers\Dashboard\TransactionController::class, 'addResiTrans'])->name('.resi');
+        Route::put('/transaksi/unapprove/{trans}', [App\Http\Controllers\Dashboard\TransactionController::class, 'unApproveTrans'])->name('.unapprove');
+        Route::put('/transaksi/eject/{trans}', [App\Http\Controllers\Dashboard\TransactionController::class, 'ejectTrans'])->name('.eject');
+    });
 });

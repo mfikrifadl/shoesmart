@@ -31,6 +31,6 @@ class Transaction extends Model
     }
     public function variants()
     {
-        return $this->belongsToMany('App\Models\Variant', 'App\Models\transaction_product', 'ttp_id_product', 'ttp_id_variant');
+        return $this->belongsToMany('App\Models\Variant', 'App\Models\transaction_product', 'ttp_id_transaction', 'ttp_id_variant');
     }
 }
