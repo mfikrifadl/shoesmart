@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Guest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Jenssegers\Agent\Agent;
 
 class HomeController extends Controller
@@ -38,6 +39,7 @@ class HomeController extends Controller
         $guest['pg_ip_address'] = $request->getClientIp();
         $guest['pg_browser'] = $agent->browser();
         $guest->save();
+        $data['ip'] = $request->getClientIp();
         return view('front.index')->with($data);
     }
 
@@ -49,7 +51,7 @@ class HomeController extends Controller
 
     public function getPopulerProduct()
     {
-        $data = Product::where('pp_is_displayed', true)->whereRaw('pp_total_stock > 0')->orderBy('pp_total_stock', 'asc')->limit(10)->get();
+        $data = Product::select(DB::raw("*, ( SELECT sum(v.pv_stock) FROM product.variant v WHERE pp_id = v.pv_id_product ) AS total_stock"))->where('pp_is_displayed', true)->orderBy('total_stock', 'asc')->limit(10)->get();
         return $data;
     }
 }

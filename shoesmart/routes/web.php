@@ -24,8 +24,18 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 Route::get('/product', [App\Http\Controllers\ProductController::class, 'index'])->name('produk');
 Route::get('/product/getFilter', [App\Http\Controllers\ProductController::class, 'getFilter']);
 Route::get('/product/{slug}', [App\Http\Controllers\ProductController::class, 'productDetail'])->name('detail.produk');
+
 Route::get('/admin/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/admin/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
+
+Route::get('/cart/{ip}', [App\Http\Controllers\TransactionController::class, 'getCart'])->name('get.cart');
+Route::get('/checkout/{ip}', [App\Http\Controllers\TransactionController::class, 'getCheckOut'])->name('get.checkout');
+Route::get('/code-order', [App\Http\Controllers\TransactionController::class, 'codeOrderPage']);
+Route::post('/checkout/add/{idCart}', [App\Http\Controllers\TransactionController::class, 'addTransaction'])->name('add.transaction');
+Route::get('/invoice/{ip}', [App\Http\Controllers\TransactionController::class, 'getCheckOut'])->name('get.invoice');
+Route::post('/product-add-cart', [App\Http\Controllers\TransactionController::class, 'addCart'])->name('add.cart');
+Route::delete('/cart/deleteprod/{cart}', [App\Http\Controllers\TransactionController::class, 'delProdCart'])->name('del.prod.cart');
+
 
 Route::prefix('dashboard')->group(function () {
     Route::get('/', [App\Http\Controllers\Dashboard\DashboardController::class, 'index']);

@@ -32,33 +32,37 @@
                 <h3 class="p-price">Rp {{rupiah($product->pp_price)}}</h3>
                 @endif
                 <h4 class="p-stock">Available: <span>In Stock</span></h4>
-                <div class="fw-size-choose">
-                    <p>Size</p>
-                    @foreach($productSize as $size)
-                    @if($size->pv_stock < 1 ) <div class="sc-item disable">
-                        <input type="radio" name="pv_id_size" id="{{$size->size->ps_id}}" disabled>
-                        @else
+                <form action="{{route('add.cart')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="pv_id_product" value="{{$product->pp_id}}">
+                    <div class="fw-size-choose">
+                        <p>Size</p>
+                        @foreach($productSize as $size)
+                        @if($size->pv_stock < 1 ) <div class="sc-item disable">
+                            <input type="radio" name="pv_id_size" id="{{$size->size->ps_id}}" disabled>
+                            @else
+                            <div class="sc-item">
+                                <input type="radio" name="pv_id_size" id="{{$size->size->ps_id}}" value="{{$size->size->ps_id}}" required>
+                                @endif
+                                <label for="{{$size->size->ps_id}}">{{$size->size->ps_size}}</label>
+                            </div>
+                            @endforeach
+                    </div>
+                    <div class="fw-size-choose">
+                        <p>Color</p>
+                        @foreach($product->colors as $color)
                         <div class="sc-item">
-                            <input type="radio" name="pv_id_size" id="{{$size->size->ps_id}}">
-                            @endif
-                            <label for="{{$size->size->ps_id}}">{{$size->size->ps_size}}</label>
+                            <input type="radio" name="pv_id_color" id="{{$color->pc_id}}" value="{{$color->pc_id}}" required>
+                            <label style="background: {{$color->pc_rgb}};" for="{{$color->pc_id}}"></label>
                         </div>
                         @endforeach
-                </div>
-                <div class="fw-size-choose">
-                    <p>Color</p>
-                    @foreach($product->colors as $color)
-                    <div class="sc-item">
-                        <input type="radio" name="pv_id_color" id="{{$color->pc_id}}">
-                        <label style="background: {{$color->pc_rgb}};" for="{{$color->pc_id}}"></label>
                     </div>
-                    @endforeach
-                </div>
-                <div class="quantity">
-                    <p>Quantity</p>
-                    <div class="pro-qty"><input type="text" name="qty" value="1"></div>
-                </div>
-                <a href="#" class="site-btn">SHOP NOW</a>
+                    <div class="quantity">
+                        <p>Quantity</p>
+                        <div class="pro-qty"><input type="text" name="tcp_qty" value="1"></div>
+                    </div>
+                    <button type="submit" class="site-btn">SHOP NOW</button>
+                </form>
                 <div id="accordion" class="accordion-area">
                     <div class="panel">
                         <div class="panel-header" id="headingOne">
@@ -415,7 +419,7 @@
                 <div class="pi-pic">
                     <img src="{{asset('image/product/'.$pr->pp_slug.'/'.$pr->imgProducts[0]->pip_img_path)}}" alt="">
                     <div class="pi-links">
-                        <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
+                        <a href="/product/{{$pr->pp_slug}}" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
                         <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
                     </div>
                 </div>

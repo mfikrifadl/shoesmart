@@ -35,4 +35,8 @@ class Variant extends Model
     {
         return $this->belongsTo('App\Models\Size', 'pv_id_size', 'ps_id');
     }
+    public function product()
+    {
+        return $this->belongsTo('App\Models\Product', 'pv_id_product', 'pp_id');
+    }
 }

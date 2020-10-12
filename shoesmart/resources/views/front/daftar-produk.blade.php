@@ -86,7 +86,7 @@
                             <div class="pi-pic">
                                 <img src="{{asset('image/product/'.$product->pp_slug.'/'.$product->imgProducts[0]->pip_img_path)}}" alt="">
                                 <div class="pi-links">
-                                    <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
+                                    <a href="/product/{{$product->pp_slug}}" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
                                     <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
                                 </div>
                             </div>
@@ -110,47 +110,3 @@
 </section>
 <!-- Category section end -->
 @endsection
-@push('after-script')
-<script>
-    $(document).ready(function() {
-
-        filter_data();
-
-        function filter_data() {
-            $('.filter_data').html('<div id="loader" style="" ></div>');
-            var action = 'fetch_data';
-            var minimum_price = $('#minamount').val();
-            var maximum_price = $('#maxamount').val();
-            var color = get_filter('color');
-            var size = get_filter('size');
-            $.ajax({
-                url: "/product/getFilter",
-                method: "POST",
-                data: {
-                    action: action,
-                    minimum_price: minimum_price,
-                    maximum_price: maximum_price,
-                    color: color,
-                    size: size,
-                },
-                success: function(data) {
-                    $('.filter_data').html(data);
-                }
-            });
-        }
-
-        function get_filter(class_name) {
-            var filter = [];
-            $('.' + class_name + ':checked').each(function() {
-                filter.push($(this).val());
-            });
-            return filter;
-        }
-
-        $('.common_selector').click(function() {
-            filter_data();
-        });
-
-    });
-</script>
-@endpush

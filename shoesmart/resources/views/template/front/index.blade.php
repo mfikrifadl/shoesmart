@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="{{asset('front/css/owl.carousel.min.css')}}" />
     <link rel="stylesheet" href="{{asset('front/css/animate.css')}}" />
     <link rel="stylesheet" href="{{asset('front/css/style.css')}}" />
+    <link rel="stylesheet" href="{{asset('dropify/css/dropify.min.css')}}">
+    @stack('add-css')
 
     @if($code_page == 'detail_product')
     <link rel="stylesheet" href="{{asset('front2/css/style.css')}}">
@@ -58,9 +60,8 @@
                             <div class="up-item">
                                 <div class="shopping-card">
                                     <i class="flaticon-bag"></i>
-                                    <span>0</span>
                                 </div>
-                                <a href="#">Shopping Cart</a>
+                                <a href="/cart/{{$ip}}">Shopping Cart</a>
                             </div>
                         </div>
                     </div>
@@ -75,6 +76,7 @@
                     <li><a href="#">Women</a></li>
                     <li><a href="#">Men</a></li>
                     <li><a href="/product">Product</a></li>
+                    <li><a href="/code-order">Check Code Order</a></li>
                 </ul>
             </div>
         </nav>
@@ -198,7 +200,7 @@
     <script src="{{asset('front/js/jquery.zoom.min.js')}}"></script>
     <script src="{{asset('front/js/jquery-ui.min.js')}}"></script>
     <script src="{{asset('front/js/main.js')}}"></script>
-
+    @stack('after-script')
 </body>
 
 </html>

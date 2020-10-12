@@ -148,7 +148,7 @@
                             <li class="list-group-item px-3 pb-2">
                                 @foreach($categories as $key=>$category)
                                 <div class="custom-control custom-checkbox mb-1">
-                                    <input type="checkbox" class="custom-control-input" name="category[{{$key}}]" value="{{$category->pc_id}}" id="category{{$key+1}}" required>
+                                    <input type="checkbox" class="custom-control-input" name="category[{{$key}}]" value="{{$category->pc_id}}" id="category{{$key+1}}">
                                     <label class="custom-control-label" for="category{{$key+1}}">{{$category->pc_title}}</label>
                                 </div>
                                 @endforeach
@@ -186,7 +186,7 @@
                             <div class="col-sm-12 col-md-4">
                                 <div class="form-group">
                                     <label for="pv_stock" class="control-label col-form-label">Stock<span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" name="pv_stock" id="pv_stock">
+                                    <input type="number" class="form-control" name="pv_stock" id="pv_stock" required>
                                 </div>
                             </div>
                             <!-- End Stock -->

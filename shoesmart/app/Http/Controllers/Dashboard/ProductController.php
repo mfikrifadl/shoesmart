@@ -102,7 +102,6 @@ class ProductController extends Controller
         $product['pp_is_displayed'] = $request->pp_is_displayed;
         $product['pp_material_upper'] = $request->pp_material_upper;
         $product['pp_material_outer_sole'] = $request->pp_material_outer_sole;
-        $product['pp_total_stock'] = $request->pv_stock + $request->pv_stock1;
         $product['pp_final_price'] = $request->pp_price;
         $product['pp_slug'] = Str::slug($request->pp_name, '-');
         $product->save();
@@ -221,24 +220,41 @@ class ProductController extends Controller
             $color1->save();
         }
 
-        $imgProduct = new ImgProduct;
-        $imgProduct['pip_id_product'] = $product['pp_id'];
-        $folder = Str::slug($request->pp_name, '-');
-        $file = $request->file('pip_img_path');
-        $nama_file = time() . "_" . $file->getClientOriginalName();
+        if (isset($request->pip_img_path)) {
+            $imgProduct = new ImgProduct;
+            $imgProduct['pip_id_product'] = $product['pp_id'];
+            $folder = Str::slug($request->pp_name, '-');
+            $file = $request->file('pip_img_path');
+            $nama_file = time() . "_" . $file->getClientOriginalName();
 
-        // isi dengan nama folder tempat kemana file diupload
-        $path = 'image/product/' . $folder . '/';
-        if (!is_dir('image/product/' . $folder)) {
-            mkdir('./image/product/' . $folder, 0777, TRUE);
+            // isi dengan nama folder tempat kemana file diupload
+            $path = 'image/product/' . $folder . '/';
+            if (!is_dir('image/product/' . $folder)) {
+                mkdir('./image/product/' . $folder, 0777, TRUE);
+            }
+            $file->move($path, $nama_file);
+            $imgProduct['pip_img_path'] = $nama_file;
+
+            $imgProduct->save();
         }
-        $file->move($path, $nama_file);
-        $imgProduct['pip_img_path'] = $nama_file;
 
-        $imgProduct->save();
-
-        $data = $request->only('pp_name', 'pp_gender', 'pp_sku', 'pp_start_promo', 'pp_end_promo', 'pp_price', 'pp_promo_price', 'pp_care_label', 'pp_measurements', 'pp_is_displayed', 'pp_id_brand', 'pp_material_upper', 'pp_material_outer_sole');
-        $product->update($data);
+        $product['pp_id_brand'] = $request->pp_id_brand;
+        $product['pp_name'] = $request->pp_name;
+        $product['pp_gender'] = $request->pp_gender;
+        $product['pp_sku'] = $request->pp_sku;
+        $product['pp_description'] = $request->pp_description;
+        $product['pp_measurements'] = $request->pp_measurements;
+        $product['pp_start_promo'] = $request->pp_start_promo;
+        $product['pp_end_promo'] = $request->pp_end_promo;
+        $product['pp_price'] = $request->pp_price;
+        $product['pp_promo_price'] = $request->pp_promo_price;
+        $product['pp_care_label'] = $request->pp_care_label;
+        $product['pp_is_displayed'] = $request->pp_is_displayed;
+        $product['pp_material_upper'] = $request->pp_material_upper;
+        $product['pp_material_outer_sole'] = $request->pp_material_outer_sole;
+        $product['pp_final_price'] = $request->pp_price;
+        $product['pp_slug'] = Str::slug($request->pp_name, '-');
+        $product->save();
 
 
         return redirect()->back()->with(['message' => 'Edit A Product']);

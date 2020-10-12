@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $data['code_page'] = 'daftar_product';
         $data['categories'] = $this->getAllCategories();
@@ -20,6 +20,7 @@ class ProductController extends Controller
         $data['sizes'] = $this->getAllSize();
         $data['brands'] = $this->getAllBrand();
         $data['products'] = $this->getAllProduct();
+        $data['ip'] = $request->getClientIp();
         return view('front.daftar-produk')->with($data);
     }
     public function getAllCategories()
@@ -51,13 +52,14 @@ class ProductController extends Controller
         }
         return $data;
     }
-    public function productDetail($slug)
+    public function productDetail(Request $request, $slug)
     {
         $data['code_page'] = 'detail_product';
         $data['product'] = Product::where('pp_slug', $slug)->first();
         if ($data['product']->pp_start_promo <= now() && $data['product']->pp_end_promo >= now()) $data['product']['diskon'] = true;
         $data['productRelate'] = $this->getProductRelated($data['product']->pp_id_brand);
         $data['productSize'] = $this->getSizeProduct($data['product']['pp_id']);
+        $data['ip'] = $request->getClientIp();
         return view('front.detail-produk')->with($data);
     }
 
@@ -78,35 +80,15 @@ class ProductController extends Controller
 
     public function getFilter(Request $request)
     {
-        if (isset($_POST["color"])) {
-            $statement = Product::where('pp_is_displayed', true)->get();
+        if (isset($request["action"])) {
+            $statement = Product::where('pp_is_displayed', true)->count();
         }
-        $total_row = $statement->rowCount();
+        $total_row = $statement;
         $output = '';
         if ($total_row > 0) {
             foreach ($statement as $row) {
                 $output .= '
-                    <div class="col-lg-4 col-sm-6">
-                    <div class="product-item">
-                        <div class="pi-pic">
-                            <img src="{{asset("image/product/".$row->pp_slug."/".$row->imgProducts[0]->pip_img_path)}}" alt="">
-                            <div class="pi-links">
-                                <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                                <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
-                            </div>
-                        </div>
-                        <div class="pi-text">
-                            @if($row->diskon == true)
-                            <h6>Rp {{rupiah($row->pp_promo_price)}}</h6>
-                            @else
-                            <h6>Rp {{rupiah($row->pp_price)}}</h6>
-                            @endif
-                            <a href="{{route("detail.produk", $row->pp_slug)}}">
-                                <p>{{$row->pp_name}}</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                    ok
 			';
             }
         } else {

@@ -94,7 +94,7 @@
                     @endif
                     <img src="{{asset('image/product/'.$lp->pp_slug.'/'.$lp->imgProducts[0]->pip_img_path)}}" alt="">
                     <div class="pi-links">
-                        <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
+                        <a href="/product/{{$lp->pp_slug}}" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
                         <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
                     </div>
                 </div>
@@ -131,12 +131,10 @@
                     <div class="pi-pic">
                         @if($pp->diskon == true)
                         <div class="tag-sale">ON SALE</div>
-                        @else
-                        <div class="tag-sale">Stock {{$pp->pp_total_stock}}</div>
                         @endif
                         <img src="{{asset('image/product/'.$pp->pp_slug.'/'.$pp->imgProducts[0]->pip_img_path)}}" alt="">
                         <div class="pi-links">
-                            <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
+                            <a href="/product/{{$pp->pp_slug}}" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
                             <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
                         </div>
                     </div>
