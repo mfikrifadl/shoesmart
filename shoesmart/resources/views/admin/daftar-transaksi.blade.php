@@ -101,7 +101,7 @@
                                                                         <td>{{$no+1}}</td>
                                                                         <td>{{$var->product->pp_name}}</td>
                                                                         <td><img class="img-dashboard" src="{{asset('image/product/'.$var->product->pp_slug.'/'.$var->product->imgProducts[0]->pip_img_path)}}" /></td>
-                                                                        <td>{{$transaction->transaction_products[$key]->ttp_qty}}</td>
+                                                                        <td>{{$transaction->transaction_products[$no]->ttp_qty}}</td>
                                                                     </tr>
                                                                     @endforeach
                                                                 </tbody>
