@@ -73,8 +73,6 @@
                 <!-- menu -->
                 <ul class="main-menu">
                     <li><a href="/">Home</a></li>
-                    <li><a href="#">Women</a></li>
-                    <li><a href="#">Men</a></li>
                     <li><a href="/product">Product</a></li>
                     <li><a href="/code-order">Check Code Order</a></li>
                 </ul>
