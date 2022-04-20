@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{{asset('admin/styles/extras.1.1.0.min.css')}}" />
     <link rel="stylesheet" href="{{asset('css/custom.css')}}" />
     <link rel="stylesheet" href="{{asset('dropify/css/dropify.min.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 </head>
 
@@ -181,6 +182,7 @@
     <script src="{{asset('admin/scripts/shards-dashboards.1.1.0.min.js')}}"></script>
     <script src="{{asset('admin/scripts/app/app-blog-overview.1.1.0.js')}}"></script>
     <script src="{{asset('admin/scripts/app/app-blog-new-post.1.1.0.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @stack('after-script')
 </body>
 
