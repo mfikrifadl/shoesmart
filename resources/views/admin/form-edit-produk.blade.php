@@ -6,7 +6,8 @@
         <span aria-hidden="true">×</span>
     </button>
     <i class="fa fa-check mx-2"></i>
-    <strong>Success!</strong> {{ session()->get('message') }} </div>
+    <strong>Success!</strong> {{ session()->get('message') }}
+</div>
 @endif
 <div class="main-content-container container-fluid px-4">
     <!-- Page Header -->
@@ -21,7 +22,7 @@
         @csrf
         {{method_field('PUT')}}
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-6">
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="row">
@@ -139,7 +140,7 @@
             </div>
 
             <!-- status -->
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <div class='card card-small mb-3'>
                     <div class="card-header border-bottom">
                         <h6 class="m-0">Categories</h6>
@@ -163,100 +164,69 @@
                     </div>
                 </div>
                 <div class="card mb-4">
-                    <div class="card-body-size">
-                        <div class="row">
+                    <div class="card-body-size" id="variant-card">
+                        <?php $getLastIndex = 0 ?>
+                        @foreach($product->variants as $index => $variant)
+                        <?php $getLastIndex = $index ?>
+                        <div class="row variant{{$index}}">
                             <!-- Product Size -->
                             <div class="col-sm-12 col-md-4">
-                                <label for="pv_id_size" class="control-label col-form-label">Size<span class="text-danger">*</span></label>
-                                @foreach($sizes as $key=>$size)
-                                <div class="custom-control custom-checkbox mb-1">
-                                    @foreach($product->sizes as $ps)
-                                    @if($size->ps_id == $ps->ps_id)
-                                    <input type="checkbox" class="custom-control-input" name="size[{{$key}}]" id="size{{$size->ps_id}}" value="{{$size->ps_id}}" checked>
-                                    @endif
-                                    @endforeach
-                                    <input type="checkbox" class="custom-control-input" name="size[{{$key}}]" id="size{{$size->ps_id}}" value="{{$size->ps_id}}">
-                                    <label class="custom-control-label" for="size{{$size->ps_id}}">{{$size->ps_size}}</label>
+                                <label for="pv_id_size[{{$index}}]" class="control-label col-form-label">Size<span class="text-danger">*</span></label>
+                                <div class="custom-checkbox mb-1">
+                                    <select class="form-control select2" id="pv_id_size{{$index}}" name="pv_id_size[{{$index}}]" required="">
+                                        @foreach($sizes as $key=>$size)
+                                        @if($variant->pv_id_size == $size->ps_id)
+                                        <option value="{{$size->ps_id}}" selected>{{$size->ps_size}}</option>
+                                        @else
+                                        <option value="{{$size->ps_id}}">{{$size->ps_size}}</option>
+                                        @endif
+                                        @endforeach
+                                    </select>
                                 </div>
-                                @endforeach
                             </div>
                             <!-- End Product Size -->
                             <!-- Color -->
                             <div class="col-sm-12 col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label col-form-label" for="pv_id_color">Color<span class="text-danger">*</span></label>
-                                    <select class="form-control" id="pv_id_color" name="pv_id_color" required>
-                                        <option value="{{$product->colors[0]->pc_id}}" style="background: {{$product->colors[0]->pc_rgb}};">{{$product->colors[0]->pc_name}}</option>
+                                    <label class="control-label col-form-label" for="pv_id_color[{{$index}}]">Color<span class="text-danger">*</span></label>
+                                    <select class="form-control" id="pv_id_color{{$index}}" name="pv_id_color[{{$index}}]" required>
                                         @foreach($colors as $color)
+                                        @if($variant->pv_id_color == $color->pc_id)
+                                        <option value="{{$color->pc_id}}" style="background: {{$color->pc_rgb}};" selected>{{$color->pc_name}}</option>
+                                        @else
                                         <option value="{{$color->pc_id}}" style="background: {{$color->pc_rgb}};">{{$color->pc_name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <!-- End Color -->
-                            <!-- Stock -->
-                            <div class="col-sm-12 col-md-4">
-                                <div class="form-group">
-                                    <label for="pv_stock" class="control-label col-form-label">Stock<span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" name="pv_stock" id="pv_stock" value="{{$product->variants[0]->pv_stock}}" required>
-                                </div>
-                            </div>
-                            <!-- End Stock -->
-                        </div>
-                    </div>
-                    <div class="row ml-2 mt-2 mr-2 mb-1">
-                        <div class="col-md-12">
-                            <button type="button" class="btn btn-primary w-100" onclick="openForm()">Tambah Variant</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-4" style="display:none;" id="variant2">
-                    <div class="card-body-size">
-                        <div class="row">
-                            <!-- Product Size -->
-                            <div class="col-sm-12 col-md-4">
-                                <label for="pv_id_size" class="control-label col-form-label">Size<span class="text-danger">*</span></label>
-                                @foreach($sizes as $key=>$size)
-                                <div class="custom-control custom-checkbox mb-1">
-                                    @foreach($product->sizes as $ps)
-                                    @if($size->ps_id == $ps->ps_id)
-                                    <input type="checkbox" class="custom-control-input" name="size1[{{$key}}]" id="size1{{$size->ps_id}}" value="{{$size->ps_id}}" checked>
-                                    @endif
-                                    @endforeach
-                                    <input type="checkbox" class="custom-control-input" name="size1[{{$key}}]" id="size1{{$size->ps_id}}" value="{{$size->ps_id}}">
-                                    <label class="custom-control-label" for="size1{{$size->ps_id}}">{{$size->ps_size}}</label>
-                                </div>
-                                @endforeach
-                            </div>
-                            <!-- End Product Size -->
-                            <!-- Colro -->
-                            <div class="col-sm-12 col-md-4">
-                                <div class="form-group">
-                                    <label class="control-label col-form-label" for="pv_id_color1">Color<span class="text-danger">*</span></label>
-                                    <select class="form-control" id="pv_id_color1" name="pv_id_color1">
-                                        @if(isset($product->colors[1]))
-                                        <option value="{{$product->colors[1]->pc_id}}" style="background: {{$product->colors[1]->pc_rgb}};">{{$product->colors[1]->pc_name}}</option>
                                         @endif
-                                        @foreach($colors as $color)
-                                        <option value="{{$color->pc_id}}" style="background: {{$color->pc_rgb}};">{{$color->pc_name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                             <!-- End Color -->
                             <!-- Stock -->
-                            <div class="col-sm-12 col-md-4">
+                            <div class="col-sm-12 col-md-3">
                                 <div class="form-group">
-                                    <label for="pv_stock1" class="control-label col-form-label">Stock<span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" name="pv_stock1" id="pv_stock" value="{{$product->variants[0]->pv_stock}}">
+                                    <label for="pv_stock[{{$index}}]" class="control-label col-form-label">Stock<span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" name="pv_stock[{{$index}}]" id="pv_stock{{$index}}" value="{{$variant->pv_stock}}" required>
                                 </div>
                             </div>
                             <!-- End Stock -->
+                            <!-- Act -->
+                            <div class="col-sm-12 col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label col-form-label">Act</label>
+                                    <a class="btn btn-white" onclick="deleteVariant({{$index}})">
+                                        <span class="text-danger">
+                                            <i class="material-icons">delete</i>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- End Act -->
                         </div>
+                        @endforeach
                     </div>
                     <div class="row ml-2 mt-2 mr-2 mb-1">
                         <div class="col-md-12">
-                            <button type="button" class="btn btn-primary w-100" onclick="closeForm()">Batal Tambah Variant</button>
+                            <button type="button" class="btn btn-primary w-100" onclick="addForm()">Tambah Variant</button>
                         </div>
                     </div>
                 </div>
@@ -373,6 +343,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('.dropify').dropify();
+        $('.select2').select2();
+        $('.select2multiple').select2();
+        $('#pv_id_size0').select2();
     });
 </script>
 <script>
@@ -383,12 +356,25 @@
 </script>
 
 <script>
+    var i = <?= $getLastIndex ?>
+
+    function addForm() {
+        i++;
+        $('#variant-card').append('<div class="row variant' + i + '"><div class="col-sm-12 col-md-4"><label for="pv_id_size[' + i + ']" class="control-label col-form-label">Size<span class="text-danger">*</span></label><div class="custom-checkbox mb-1"><select class="form-control select2" id="pv_id_size' + i + '" name="pv_id_size[' + i + ']" required="">@foreach($sizes as $key=>$size)<option value="{{$size->ps_id}}">{{$size->ps_size}}</option>@endforeach</select></div></div><div class="col-sm-12 col-md-4"><div class="form-group"><label class="control-label col-form-label" for="pv_id_color[' + i + ']">Color<span class="text-danger">*</span></label><select class="form-control" id="pv_id_color' + i + '" name="pv_id_color[' + i + ']" required>@foreach($colors as $color)<option value="{{$color->pc_id}}" style="background: {{$color->pc_rgb}};">{{$color->pc_name}}</option>@endforeach</select></div></div><div class="col-sm-12 col-md-3"><div class="form-group"><label for="pv_stock[' + i + ']" class="control-label col-form-label">Stock<span class="text-danger">*</span></label><input type="number" class="form-control" name="pv_stock[' + i + ']" id="pv_stock' + i + '" required></div></div><div class="col-sm-12 col-md-1"><div class="form-group"><label class="control-label col-form-label">Act</label><a class="btn btn-white" onclick="deleteVariant(' + i + ')"><span class="text-danger"><i class="material-icons">delete</i></span></a></div></div></div>');
+        $('#pv_id_size' + i + '').select2();
+    }
+
     function openForm() {
+        alert(i)
         document.getElementById("variant2").style.display = "block";
     }
 
     function closeForm() {
         document.getElementById("variant2").style.display = "none";
+    }
+
+    function deleteVariant(x) {
+        $('.variant' + x).remove();
     }
 </script>
 
